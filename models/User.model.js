@@ -42,9 +42,9 @@ const userSchema = new Schema(
     birthdate: {
       type: Date,
     },
-    profilepic: {
-      type: Image,
-    },
+    // profilepic: {
+    //   type: Image,
+    // },
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
