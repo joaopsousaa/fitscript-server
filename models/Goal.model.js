@@ -11,10 +11,6 @@ const goalSchema = new Schema(
       type: Date,
       required: true,
     },
-    owner: {
-      ref: "User",
-      type: Schema.Types.ObjectId,
-    },
   },
   {
     timestamps: true,

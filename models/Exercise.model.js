@@ -2,26 +2,18 @@ const { Schema, model } = require("mongoose");
 
 const exerciseSchema = new Schema(
   {
-    type: {
+    workoutType: {
       type: String,
-      enum: ["Cardio", "Strenght"],
+      enum: ["cardio", "strength"],
     },
     exerciseName: {
       type: String,
     },
-    numberOfReps: {
-      type: Number,
-    },
-    numberOfSets: {
-      type: Number,
-    },
-    totalWeightLifted: {
-      type: Number,
-    },
+    set: [{ numberOfReps: Number, weightLifted: Number }],
+
     totalCaloriesBurned: {
       type: Number,
     },
-    workoutId: { type: Schema.Types.ObjectId, ref: "Workout" },
   },
   {
     timestamps: true,

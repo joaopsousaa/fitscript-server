@@ -1,7 +1,19 @@
-// const { Router } = require("express");
+const router = require("express").Router();
+
 // const { isAuthenticated } = require("../middleware/jwt.middleware");
-// const { Workout } = require("../models/Workout.model");
+const Exercise = require("../models/Exercise.model");
+const { BAD_REQUEST } = require("../utils/status.codes");
 
-// const workoutRoutes = Router();
+router.post("/", (req, res) => {
+  const exerciseFromFrontEnd = req.body;
+  console.log(exerciseFromFrontEnd);
+  Exercise.create({ ...exerciseFromFrontEnd })
+    .then((exercise) => {
+      return res.json(exercise);
+    })
+    .catch(() => {
+      return res.status(BAD_REQUEST);
+    });
+});
 
-// workoutRoutes.get("/", isAuthenticated, (req, res) => {});
+module.exports = router;

@@ -43,8 +43,10 @@ const userSchema = new Schema(
       type: Date,
     },
     // profilepic: {
-    //   type: Image,
+    //   type: String,
+    // default: image.url,
     // },
+    goals: [{ ref: "Goal", type: Schema.Types.ObjectId }],
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
