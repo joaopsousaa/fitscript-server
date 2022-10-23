@@ -21,6 +21,18 @@ app.use("/", indexRoutes);
 const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
 
+// const dashboardRoutes = require("./routes/dashboard.routes");
+// app.use("/dashboard", dashboardRoutes);
+
+// const profileRoutes = require("./routes/profile.routes");
+// app.use("/profile", profileRoutes);
+
+const workoutRoutes = require("./routes/workout.routes");
+app.use("/workout", workoutRoutes);
+
+// const bmiRoutes = require("./routes/bmi.routes");
+// app.use("/bmi", bmiRoutes);
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
 
