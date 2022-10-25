@@ -30,8 +30,8 @@ app.use("/auth", authRoutes);
 const workoutRoutes = require("./routes/workout.routes");
 app.use("/workout", workoutRoutes);
 
-// const bmiRoutes = require("./routes/bmi.routes");
-// app.use("/bmi", bmiRoutes);
+const bmiRoutes = require("./routes/bmi.routes");
+app.use("/bmi", bmiRoutes);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
