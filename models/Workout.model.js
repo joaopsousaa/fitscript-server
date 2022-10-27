@@ -10,9 +10,9 @@ const workoutSchema = new Schema(
     totalTimeWorkingOut: {
       type: Number,
     },
-    waterConsumed: {
-      type: Number,
-    },
+    // waterConsumed: {
+    //   type: Number,
+    // },
   },
   {
     timestamps: true,

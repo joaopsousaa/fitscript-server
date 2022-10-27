@@ -47,6 +47,7 @@ const userSchema = new Schema(
     // default: image.url,
     // },
     goals: [{ ref: "Goal", type: Schema.Types.ObjectId }],
+    workouts: [{ ref: "Workout", type: Schema.Types.ObjectId }],
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
