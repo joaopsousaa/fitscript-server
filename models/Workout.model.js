@@ -4,15 +4,24 @@ const workoutSchema = new Schema(
   {
     exercises: [
       {
-        type: Schema.ObjectId,
+        // type: {
+        //   type: String,
+        //   enum: ["cardio", "strength"],
+        // },
+        name: {
+          type: String,
+        },
+        sets: [{ numberOfReps: Number, weightLifted: Number }],
+
+        totalCaloriesBurned: {
+          //investigate computed MONGODB properties
+          type: Number,
+        },
       },
     ],
     totalTimeWorkingOut: {
       type: Number,
     },
-    // waterConsumed: {
-    //   type: Number,
-    // },
   },
   {
     timestamps: true,
