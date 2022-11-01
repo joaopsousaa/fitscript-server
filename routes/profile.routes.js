@@ -6,23 +6,9 @@ const { BAD_REQUEST } = require("../utils/status.codes");
 const { jwtMiddleware } = require("express-jwt-middleware");
 
 profileRouter.post("/edit", isAuthenticated, (req, res) => {
-  const {
-    username,
-    name,
-    email,
-    birthdate,
-    password,
-    smoking,
-    alcohol,
-    gender,
-  } = req.body;
+  const { name, email, birthdate, password, smoking, alcohol, gender } =
+    req.body;
   const { user } = req;
-
-  if (!username) {
-    return res
-      .status(BAD_REQUEST)
-      .json({ message: "Please provide your username" });
-  }
 
   if (!name) {
     return res
@@ -56,7 +42,7 @@ profileRouter.post("/edit", isAuthenticated, (req, res) => {
   }
 
   User.findone({
-    $or: [{ username }, { email }],
+    $or: [{ email }],
     _id: [{ $ne: user._id }],
   }).then((foundUser) => {
     if (foundUser) {
@@ -66,7 +52,6 @@ profileRouter.post("/edit", isAuthenticated, (req, res) => {
     User.findByIdAndUpdate(
       user._id,
       {
-        username,
         name,
         email,
         gender,
@@ -77,6 +62,7 @@ profileRouter.post("/edit", isAuthenticated, (req, res) => {
       },
       { new: true }
     ).then((updatedUser) => {
+      console.log(updatedUser);
       const token = jwtMiddleware.sign(
         { _id: user._id, username: updatedUser.username },
         process.env.TOKEN_SECRET,
