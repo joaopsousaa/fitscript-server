@@ -1,13 +1,12 @@
 const express = require("express");
 const { User } = require("../models/User.model");
-const isAuthenticated = require("/middleware/jwt.middleware");
-const profileRouter = express.Router();
+const { isAuthenticated } = require("../middleware/jwt.middleware");
+const router = express.Router();
 const { BAD_REQUEST } = require("../utils/status.codes");
 const { jwtMiddleware } = require("express-jwt-middleware");
 
-profileRouter.post("/edit", isAuthenticated, (req, res) => {
-  const { name, email, birthdate, password, smoking, alcohol, gender } =
-    req.body;
+router.post("/", isAuthenticated, (req, res) => {
+  const { name, email, birthdate, smoking, alcohol, gender } = req.body;
   const { user } = req;
 
   if (!name) {
@@ -41,36 +40,36 @@ profileRouter.post("/edit", isAuthenticated, (req, res) => {
       .json({ message: "Please select one of the option" });
   }
 
-  User.findone({
+  User.findOne({
     $or: [{ email }],
     _id: [{ $ne: user._id }],
-  }).then((foundUser) => {
-    if (foundUser) {
-      return res.status(BAD_REQUEST).json({ message: "User exist" });
-    }
-
-    User.findByIdAndUpdate(
-      user._id,
-      {
-        name,
-        email,
-        gender,
-        smoking,
-        alcohol,
-        birthdate,
-        password,
-      },
-      { new: true }
-    ).then((updatedUser) => {
+  })
+    .then((foundUser) => {
+      if (foundUser) {
+        return res.status(BAD_REQUEST).json({ message: "User exist" });
+      }
+      return User.findByIdAndUpdate(
+        user._id,
+        {
+          name,
+          email,
+          gender,
+          smoking,
+          alcohol,
+          birthdate,
+        },
+        { new: true }
+      );
+    })
+    .then((updatedUser) => {
       console.log(updatedUser);
       const token = jwtMiddleware.sign(
-        { _id: user._id, username: updatedUser.username },
+        { _id: user._id, name: updatedUser.name },
         process.env.TOKEN_SECRET,
         { algorithm: "HS256", expiresIn: "12h" }
       );
-      res.json({ user: updatedUser, token });
+      return res.json({ user: updatedUser, token });
     });
-  });
 });
 
-module.exports = profileRouter;
+module.exports = router;

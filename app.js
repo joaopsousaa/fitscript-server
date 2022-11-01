@@ -24,8 +24,8 @@ app.use("/auth", authRoutes);
 const dashboardRoutes = require("./routes/dashboard.routes");
 app.use("/dashboard", dashboardRoutes);
 
-// const profileRoutes = require("./routes/profile.routes");
-// app.use("/profile", profileRoutes);
+const profileRoutes = require("./routes/profile.routes");
+app.use("/profile", profileRoutes);
 
 const workoutRoutes = require("./routes/workout.routes");
 app.use("/workout", workoutRoutes);
