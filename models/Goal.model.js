@@ -5,7 +5,7 @@ const goalSchema = new Schema(
     title: {
       type: String,
       required: true,
-      enum: ["weight lost", "muscle gain"],
+      enum: ["lose weight", "muscle gain"],
     },
     deadline: {
       type: Date,
