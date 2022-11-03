@@ -4,10 +4,6 @@ const workoutSchema = new Schema(
   {
     exercises: [
       {
-        // type: {
-        //   type: String,
-        //   enum: ["cardio", "strength"],
-        // },
         name: {
           type: String,
         },

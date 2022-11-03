@@ -1,14 +1,17 @@
 const express = require("express");
-const { User } = require("../models/User.model");
+const User = require("../models/User.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 const router = express.Router();
 const { BAD_REQUEST } = require("../utils/status.codes");
-const { jwtMiddleware } = require("express-jwt-middleware");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 router.post("/", isAuthenticated, (req, res) => {
-  const { name, email, birthdate, smoking, alcohol, gender } = req.body;
-  const { user } = req;
-
+  const { name, email, birthdate, gender, password, confirmPassword } =
+    req.body;
+  const userId = req.payload._id;
+  console.log(userId);
   if (!name) {
     return res
       .status(BAD_REQUEST)
@@ -28,46 +31,65 @@ router.post("/", isAuthenticated, (req, res) => {
       .json({ message: "Please provide your gender type" });
   }
 
-  if (!smoking) {
-    return res
-      .status(BAD_REQUEST)
-      .json({ message: "Please select one of the option" });
+  const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+
+  if (password !== confirmPassword) {
+    return res.status(BAD_REQUEST).json({ message: "Passwords don't match" });
+  }
+  if (!passwordRegex.test(password)) {
+    res.status(400).json({
+      message:
+        "Password must have at least 6 characters and contain at least one number, one lowercase and one uppercase letter.",
+    });
+    return;
   }
 
-  if (!alcohol) {
-    return res
-      .status(BAD_REQUEST)
-      .json({ message: "Please select one of the option" });
-  }
+  // if (!smoking) {
+  //   return res
+  //     .status(BAD_REQUEST)
+  //     .json({ message: "Please select one of the option" });
+  // }
+
+  // if (!alcohol) {
+  //   return res
+  //     .status(BAD_REQUEST)
+  //     .json({ message: "Please select one of the option" });
+  // }
 
   User.findOne({
     $or: [{ email }],
-    _id: [{ $ne: user._id }],
+    _id: { $ne: userId },
   })
     .then((foundUser) => {
       if (foundUser) {
         return res.status(BAD_REQUEST).json({ message: "User exist" });
       }
+
+      const salt = bcrypt.genSaltSync(saltRounds);
+      const hashedPassword = bcrypt.hashSync(password, salt);
+
       return User.findByIdAndUpdate(
-        user._id,
+        userId,
         {
           name,
           email,
           gender,
-          smoking,
-          alcohol,
+          // smoking,
+          // alcohol,
           birthdate,
+          password: hashedPassword,
         },
         { new: true }
       );
     })
     .then((updatedUser) => {
+      const { _id, email, name, gender, birthdate } = updatedUser;
+      const payload = { _id, email, name };
       console.log(updatedUser);
-      const token = jwtMiddleware.sign(
-        { _id: user._id, name: updatedUser.name },
-        process.env.TOKEN_SECRET,
-        { algorithm: "HS256", expiresIn: "12h" }
-      );
+      const token = jwt.sign(payload, process.env.TOKEN_SECRET, {
+        algorithm: "HS256",
+        expiresIn: "12h",
+      });
       return res.json({ user: updatedUser, token });
     });
 });

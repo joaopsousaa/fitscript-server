@@ -31,14 +31,14 @@ const userSchema = new Schema(
       type: String,
       enum: ["male", "female"],
     },
-    smoking: {
-      type: String,
-      enum: ["yes", "no"],
-    },
-    alcohol: {
-      type: String,
-      enum: ["yes", "no"],
-    },
+    // smoking: {
+    //   type: String,
+    //   enum: ["yes", "no"],
+    // },
+    // alcohol: {
+    //   type: String,
+    //   enum: ["yes", "no"],
+    // },
     birthdate: {
       type: Date,
     },
