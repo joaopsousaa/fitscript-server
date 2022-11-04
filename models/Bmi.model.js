@@ -14,11 +14,6 @@ const bmiSchema = new Schema(
       type: Number,
       required: true,
     },
-    // sex: {
-    //   type: String,
-    //   enum: ["m", "f"],
-    //   required: true,
-    // },
   },
   {
     timestamps: true,

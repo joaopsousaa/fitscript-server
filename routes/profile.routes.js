@@ -94,4 +94,18 @@ router.post("/", isAuthenticated, (req, res) => {
     });
 });
 
+router.post("/delete", isAuthenticated, (req, res) => {
+  const userId = req.payload._id;
+  console.log("userId:", userId);
+  User.findOne(userId);
+
+  // .then((foundUser) => {
+  //   console.log("founduser:", foundUser);
+  // });
+
+  return User.findByIdAndDelete(userId, { new: true }).then((deletedUser) => {
+    console.log("deleteduser:", deletedUser);
+  });
+});
+
 module.exports = router;
